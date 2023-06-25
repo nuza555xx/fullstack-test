@@ -11,6 +11,11 @@ export interface LoginWithProviderDto {
 }
 
 export interface PlaceSearchResponse {
+  nextPage?: string;
+  payload: { title: string; description: string; photo: string }[];
+}
+
+export interface PlaceSearchAPIResponse {
   html_attributions: unknown[];
   next_page_token: string;
   results: PlaceSearchResult[];
