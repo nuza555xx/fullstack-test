@@ -15,13 +15,13 @@ To get started with the project, follow these steps:
 ```
 git clone https://github.com/nuza555xx/fullstack-test
 ```
-## Navigate to the project's directory:
+2. Navigate to the project's directory:
 
 ```
 cd fullstack-test
 ```
 
-## Start the Docker containers using Docker Compose:
+3. Start the Docker containers using Docker Compose:
 
 ```
 docker-compose up -d
@@ -30,7 +30,7 @@ docker-compose up -d
 ## Installation and Setup
 To set up the API, follow these steps:
 
-1. Navigate to the API directory:
+## Navigate to the API directory:
 
 ```
 cd api
@@ -50,30 +50,30 @@ The API provides the following endpoints:
 `GET /place`: Retrieve information about a place. Example usage:
 
 ```
-curl http://localhost:3000/api/place
+curl -H "api-key: YOUR_API_KEY" http://localhost:3000/api/place
 ```
 `POST /login-with-provider`: Perform login using a third-party provider. Example usage:
 
 ```
-curl -X POST http://localhost:3000/api/login-with-provider
+curl -H "api-key: YOUR_API_KEY" -X POST http://localhost:3000/api/login-with-provider
 ```
-GET /game24: Get a solution to the Game 24 problem. Example usage:
+`GET /game24`: Get a solution to the Game 24 problem. Example usage:
 
 ```
-curl http://localhost:3000/api/game24
+curl -H "api-key: YOUR_API_KEY" http://localhost:3000/api/game24
 ```
 ## Definitions
-### Controllers: 
+1. Controllers: 
 In the context of this project, controllers handle the logic and behavior of API endpoints. They receive requests, process them, and return the appropriate responses.
-### Middleware: 
+2. Middleware: 
 Middleware functions are functions that have access to the request and response objects in the API's request-response cycle. They can perform additional operations on the request or response, modify data, or terminate the request-response cycle.
-### Routes: 
+3. Routes: 
 Routes define the paths and HTTP methods associated with the API endpoints. They map incoming requests to their corresponding controllers.
-### Interface: 
+4. Interface: 
 Interfaces in this project refer to TypeScript interfaces. They define the shape of data objects, including their properties, types, and optional/required attributes.
-### Schema (Mongoose): 
+5. Schema (Mongoose): 
 In the context of Mongoose, a schema is a way to define the structure of a MongoDB collection. It defines the fields, data types, validation rules, and more for the documents in that collection.
-### Service: 
+6. Service: 
 Services encapsulate business logic and provide a way to interact with the underlying data layer (such as a database) or external services. They are responsible for handling data manipulation and implementing complex operations.
 
 # Web
