@@ -19,6 +19,11 @@ export class ApplicationRouter {
     );
 
     this.router.get('/place', this.cachedMiddleware.setCache, this.controller.getPlace);
+    this.router.get(
+      '/place/media',
+      this.validationMiddleware.getMedia,
+      this.controller.getPlaceMedia,
+    );
 
     this.router.post('/game24', this.validationMiddleware.game24Nums, this.controller.getGame24);
 

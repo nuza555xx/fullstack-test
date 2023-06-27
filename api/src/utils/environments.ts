@@ -17,4 +17,5 @@ export class Environments {
   static readonly mongoDB: string = process.env.MONGO_DB || 'test';
 
   static readonly JwtSecretKey: string = process.env.JWT_SECRET_KEY || 'JWT_SECRET_KEY';
+  static readonly Hostname: string = process.env.HOST_URL || 'localhost';
 }

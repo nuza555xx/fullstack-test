@@ -1,0 +1,38 @@
+steps:
+  - name: "node:18-alpine"
+    entrypoint: "npm"
+    args: ["install"]
+  - name: "node:18-alpine"
+    entrypoint: "npm"
+    args: ["run", "build"]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "asia-southeast1-docker.pkg.dev/$PROJECT_ID/crashboy/web:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      ["push", "asia-southeast1-docker.pkg.dev/$PROJECT_ID/crashboy/web:latest"]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "web",
+        "--image",
+        "asia-southeast1-docker.pkg.dev/$PROJECT_ID/crashboy/web:latest",
+        "--region",
+        "asia-southeast1",
+        "--allow-unauthenticated",
+        "--min-instances=1",
+        "--max-instances=2",
+        "--memory=256Mi",
+      ]
+
+logsBucket: "gs://crashboy-388808_cloudbuild"
+options:
+  logging: GCS_ONLY

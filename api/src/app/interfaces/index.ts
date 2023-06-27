@@ -12,7 +12,7 @@ export interface LoginWithProviderDto {
 
 export interface PlaceSearchResponse {
   nextPage?: string;
-  payload: { title: string; description: string; photo: string }[];
+  payload: { title: string; description: string; photoRef: string }[];
 }
 
 export interface PlaceSearchAPIResponse {

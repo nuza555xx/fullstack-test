@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
-import snackcaseKeys from 'snakecase-keys';
 
 export class ValidationMiddleware {
   async loginWithProvider(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -12,12 +11,10 @@ export class ValidationMiddleware {
     ]);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json(
-        snackcaseKeys({
-          statusCode: 400,
-          errors: errors.array(),
-        }),
-      );
+      res.status(400).json({
+        statusCode: 400,
+        errors: errors.array(),
+      });
     } else next();
   }
 
@@ -26,12 +23,21 @@ export class ValidationMiddleware {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(400).json(
-        snackcaseKeys({
-          statusCode: 400,
-          errors: errors.array(),
-        }),
-      );
+      res.status(400).json({
+        statusCode: 400,
+        errors: errors.array(),
+      });
+    } else next();
+  }
+
+  async getMedia(req: Request, res: Response, next: NextFunction): Promise<void> {
+    await Promise.all([check('refId').notEmpty().run(req)]);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        statusCode: 400,
+        errors: errors.array(),
+      });
     } else next();
   }
 }

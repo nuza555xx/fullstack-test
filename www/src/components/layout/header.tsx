@@ -12,10 +12,27 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import { theme } from "@utils/components/theme";
 import CustomInput from "../elements/input";
 import { useState } from "react";
+import { Dispatch } from "redux";
+import { PlaceActionTypes, fetchPlace } from "@utils/store/place/place.action";
+import { useDispatch } from "react-redux";
+import { debounce } from "lodash";
 
 export default function CustomHeader() {
-  const [initialValues] = useState<{ search: string }>({ search: "" });
-  const handleSubmit = async ({ search }: { search: string }) => {};
+  const [initialValues] = useState<{ search: string }>({
+    search: "",
+  });
+  const dispatch: Dispatch<PlaceActionTypes> = useDispatch();
+  const handleSearch = debounce((e: any) => {
+    dispatch(
+      fetchPlace({
+        method: "GET",
+        url: "https://api-eekpk6c73q-as.a.run.app/api/place",
+        params: {
+          search: e.target.value,
+        },
+      }) as any
+    );
+  }, 1000);
   return (
     <>
       <AppBar elevation={1} position="static" color="inherit">
@@ -45,7 +62,7 @@ export default function CustomHeader() {
           </Box>
 
           <Box sx={{ alignContent: "end" }}>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={initialValues} onSubmit={() => {}}>
               {() => (
                 <Form>
                   <Box
@@ -57,6 +74,7 @@ export default function CustomHeader() {
                         as={CustomInput}
                         sx={{ height: 30 }}
                         name="search"
+                        onKeyUp={handleSearch}
                         endAdornment={
                           <InputAdornment position="end">
                             <SearchIcon />

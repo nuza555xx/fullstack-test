@@ -1,13 +1,12 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import {
-  PlaceSearchAPIResponse,
-  PlaceSearchQuery,
-  PlaceSearchResponse,
-  PlaceSearchResult,
-} from '../interfaces';
-import { Environments } from '../../utils';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { PlaceSearchAPIResponse, PlaceSearchQuery, PlaceSearchResponse } from '../interfaces';
+import { Environments, Logger } from '../../utils';
+import snackcaseKeys from 'snakecase-keys';
+import { hostname } from 'os';
 
 export class PlaceService {
+  private readonly logger: Logger = new Logger(PlaceService.name);
+
   async getPlaces({ search, pageToken }: PlaceSearchQuery): Promise<PlaceSearchResponse> {
     const url = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
 
@@ -27,23 +26,41 @@ export class PlaceService {
 
     const response = await axios<PlaceSearchAPIResponse>(config);
 
-    const places = await Promise.all(
-      response.data.results.map(async (place) => {
-        const payload = {
-          title: place.name,
-          description: place.formatted_address,
-          photo: '',
-        };
-        if (place.photos) payload.photo = await this.getPlacePhoto(place.photos[0].photo_reference);
+    const places = response.data.results.map((place) => {
+      const payload = {
+        title: place.name,
+        description: place.formatted_address,
+        photoRef: place.photos?.length
+          ? `${Environments.Hostname}/api/place/media?refId=${place.photos[0].photo_reference}`
+          : '',
+      };
 
-        return payload;
-      }),
-    );
+      return payload;
+    });
     return { payload: places, nextPage: response.data.next_page_token };
   }
-  getPlacePhoto(photoReference: string): string {
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${400}&photo_reference=${photoReference}&key=${
-      Environments.googleAPIKey
-    }`;
+
+  async getPlaceMedia(photoReference: string): Promise<AxiosResponse<Buffer> | undefined> {
+    try {
+      const url = 'https://maps.googleapis.com/maps/api/place/photo';
+
+      const params = {
+        maxwidth: 400,
+        photoReference: photoReference,
+        key: Environments.googleAPIKey,
+      };
+
+      const config: AxiosRequestConfig = {
+        method: 'GET',
+        url,
+        params: snackcaseKeys(params),
+        responseType: 'arraybuffer',
+      };
+
+      const response = await axios(config);
+      return response;
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 }
