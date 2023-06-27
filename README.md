@@ -2,6 +2,11 @@
 
 Fullstack Test
 
+# Demo
+API :: [https://api-eekpk6c73q-as.a.run.app](https://api-eekpk6c73q-as.a.run.app)
+WEBSITE :: [https://web-eekpk6c73q-as.a.run.app](https://web-eekpk6c73q-as.a.run.app)
+
+
 ## Description
 
 This is a full-stack test project that consists of an API and a web application. The API provides various endpoints for interacting with the system, and the web application serves as the front-end interface.
